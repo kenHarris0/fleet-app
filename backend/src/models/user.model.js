@@ -4,11 +4,12 @@ const schema=new mongoose.Schema({
     name:{type:String},
     email:{type:String,unique:true,required:true},
     password:{type:String,required:true},
-    aboutme:{type:String},
+    aboutme:{type:String,default:""},
     hobbies:{type:Array,default:[]},
-    personality:{type:String},
-    tag:{type:String},
-    vibe:{type:String},
+    image:{type:String},
+    personality:{type:String,default:""},
+    tag:{type:String,default:""},
+    vibe:{type:String,default:""},
     friends:[
         {
             type:mongoose.Schema.Types.ObjectId,

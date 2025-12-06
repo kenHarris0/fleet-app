@@ -1,6 +1,7 @@
 
 import jwt from "jsonwebtoken"
-
+import dotenv from 'dotenv'
+dotenv.config()
 
 export const createCookie=async(userId,res)=>{
 
@@ -10,7 +11,7 @@ export const createCookie=async(userId,res)=>{
         res.cookie("jwt",token,{
             httpOnly:true,
             maxAge:7*24*60*60*1000,
-            sameSite:'strict',
+            sameSite:'lax',
             secure:process.env.NODE_ENV==='development'?false:true,
         })
 

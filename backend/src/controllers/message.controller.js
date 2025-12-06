@@ -1,7 +1,8 @@
 import Message from "../models/message.model.js"
 import User from "../models/user.model.js"
 import cloudinary from "../lib/cloudinary.js"
-
+import {findUsersocketid} from '../lib/socket.js'
+import {io} from '../lib/socket.js'
 
 export const sendMessage=async(req,res)=>{
     try{
@@ -21,7 +22,22 @@ export const sendMessage=async(req,res)=>{
             image:Image
         })
         await newmsg.save()
-        res.json({message:"message sent"})
+         const senderSocket=findUsersocketid(senderId)
+        if (senderSocket) {
+  io.to(senderSocket).emit("Getmessages", newmsg); // sender sees message instantly
+}
+
+        const receiverSocket=findUsersocketid(receiverId)
+        if(receiverSocket){
+            
+                
+            io.to(receiverSocket).emit("Getmessages",newmsg)
+
+
+
+
+        }
+        res.json(newmsg)
 
 
 
@@ -69,9 +85,9 @@ export const sendMessage=async(req,res)=>{
  export const getAllFriends=async(req,res)=>{
     try{
         const userId=req.userId
-        const userfriends=await User.findById(userId).select("friends").select("-password")
+        const userfriends=await User.findById(userId).populate("friends", "-password")
 
-        res.json(userfriends)
+        res.json(userfriends.friends)
 
     }
     catch(err){

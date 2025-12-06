@@ -1,22 +1,24 @@
 import express from 'express'
 
  const router=express.Router()
-
-import {login,logout,signup} from "../controllers/user.controller.js"
+import authMiddleware from "../middlewares/auth.middleware.js"
+import {login,logout,signup,getuserdata,updateProfilepic} from "../controllers/user.controller.js"
 
 
 router.post('/login',login)
 router.post('/signup',signup)
 router.post('/logout',logout)
-
-router.post('/check',(req,res)=>{
+router.get('/getuserdata',authMiddleware,getuserdata)
+router.post('/check',authMiddleware,(req,res)=>{
     try{
-        res.json({message:"user Authenticated"})
+        res.json({success:true,message:"user Authenticated"})
 
     }
     catch(err){
         console.log(err)
     }
 })
+
+router.post('/updatepic',authMiddleware,updateProfilepic)
 
 export default router

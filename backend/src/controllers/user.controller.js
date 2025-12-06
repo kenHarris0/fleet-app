@@ -1,7 +1,7 @@
 import User from '../models/user.model.js'
 import bcrypt from 'bcrypt'
 import {createCookie} from '../lib/cookieHandler.js'
-
+import cloudinary from "../lib/cloudinary.js"
 
 export const login=async(req,res)=>{
     const {email,password}=req.body
@@ -21,7 +21,7 @@ export const login=async(req,res)=>{
         }
         createCookie(user._id,res)
 
-        res.json({success:true,message:"logged in"})
+        res.json({success:true,payload:user})
 
        
 
@@ -52,7 +52,7 @@ export const signup=async(req,res)=>{
         })
         await newuser.save()
         createCookie(newuser._id,res)
-          res.json({success:true,message:"signed up "})
+          res.json({success:true,payload:newuser})
 
     }
     catch(err){
@@ -67,7 +67,7 @@ export const logout=async(req,res)=>{
         res.cookie("jwt","",{
             maxAge:0
         })
-        res.json({message:"logged out successfully"})
+        res.json({success:true,message:"logged out successfully"})
 
     }
       catch(err){
@@ -77,3 +77,37 @@ export const logout=async(req,res)=>{
     
 }
 
+export const getuserdata=async(req,res)=>{
+    try{
+        const userId=req.userId
+        const userdata=await User.findById(userId).select("-password")
+        res.json({success:true,payload:userdata})
+
+    }
+    catch(err){
+        console.log(err)
+    }
+}
+
+export const updateProfilepic=async(req,res)=>{
+    try{
+        const userId=req.userId
+        const profilepic=req.body.profilepic
+         if (!profilepic) {
+            return res.json({ success: false, message: "No image provided" });
+        }
+let image;
+        
+            const result=await cloudinary.uploader.upload(profilepic)
+            image=result.secure_url
+        
+
+        const user=await User.findByIdAndUpdate(userId,{image:image},{new:true})
+
+        res.json({success:true,payload:image})
+
+    }
+     catch(err){
+        console.log(err)
+    }
+}
