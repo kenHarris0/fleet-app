@@ -3,6 +3,8 @@ import User from "../models/user.model.js"
 import cloudinary from "../lib/cloudinary.js"
 import {findUsersocketid} from '../lib/socket.js'
 import {io} from '../lib/socket.js'
+import Chat from '../models/chatModel.js'
+
 
 export const sendMessage=async(req,res)=>{
     try{
@@ -37,7 +39,11 @@ export const sendMessage=async(req,res)=>{
 
 
         }
+
         res.json(newmsg)
+
+     
+
 
 
 

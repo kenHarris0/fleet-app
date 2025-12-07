@@ -2,8 +2,8 @@ import React, { useContext, useEffect, useRef } from 'react'
 import { fleetContext } from '../context/Context'
 
 
-const ChatContainer = ({selectedUser}) => {
-    const {url,messages,getMessagebyid,userdata}=useContext(fleetContext)
+const ChatContainer = ({selectedUser,isGroup}) => {
+    const {url,messages,getMessagebyid,userdata,grpmessage,setgrpmessage,getGroupMessage}=useContext(fleetContext)
 const lastref=useRef()
 
 
@@ -11,22 +11,36 @@ const lastref=useRef()
 
     useEffect(()=>{
         if(!selectedUser) return;
+        if(!isGroup){
         const fetchdata=async()=>{
-        getMessagebyid(selectedUser._id)
+        await getMessagebyid(selectedUser._id)
         }
         fetchdata()
+      }
+      else if(isGroup){
+      const fetchall=async()=>{
+        await getGroupMessage(selectedUser._id)
 
-    },[selectedUser])
+      }
+      fetchall()
+    }
+
+    },[selectedUser,isGroup])
 
 useEffect(()=>{
-lastref.current?.scrollIntoView({behaviour:"smooth"})
-},[messages])
+lastref.current?.scrollIntoView({behavior:"smooth"})
+},[messages,grpmessage])
   
+let overallmsg=isGroup?grpmessage:messages
 
   return (
     <div className='w-full h-[90%] flex flex-col p-7 gap-2 overflow-y-auto bg-black-300 ml-1 text-white'>
-        {messages?.map((message,ind)=>{
-           const isSender = message?.senderId === userdata?._id;
+
+
+      
+        {overallmsg?.map((message,ind)=>{
+           const isSender = message?.senderId === userdata?._id ||
+           message.senderId?._id===userdata._id
 
 
             return(
@@ -68,11 +82,11 @@ lastref.current?.scrollIntoView({behaviour:"smooth"})
     <div className="w-10 rounded-full">
       <img
         alt="Tailwind CSS chat bubble component"
-        src={selectedUser?.image}
+        src={(isGroup ? message.senderId?.image : selectedUser?.image) || "/avatar.png"}
       />
     </div>
   </div>
-  <div className="chat-bubble">
+  <div className="chat-bubble" >
     {message?.text && <p>{message.text}</p>}
     {message.image && <img src={message.image} alt='xx' className='w-[200px] h-[90px] object-cover'/>}
      <p className="text-xs mt-1 opacity-75 flex items-center gap-1">
@@ -97,8 +111,8 @@ lastref.current?.scrollIntoView({behaviour:"smooth"})
 
              
         })}
-
-      <div ref={lastref}></div>
+<div ref={lastref}></div>
+     
     </div>
   )
 }

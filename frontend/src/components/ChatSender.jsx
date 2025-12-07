@@ -3,8 +3,8 @@ import { Paperclip, Send } from 'lucide-react';
 import { fleetContext } from '../context/Context';
 import axios from 'axios';
 
-const ChatSender = ({selectedUser}) => {
-  const { url } = useContext(fleetContext);
+const ChatSender = ({selectedUser,isGroup}) => {
+  const { url,grpmessage,setgrpmessage,getGroupMessage } = useContext(fleetContext);
 
   const [text, settext] = useState("");
   const [file, setfile] = useState(null);
@@ -39,17 +39,44 @@ const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const receiverId = selectedUser?._id;
+    const id = selectedUser?._id;
 setLoading(true)
     try {
-      await axios.post(
-        url + `/msg/send/${receiverId}`,
+      if(!isGroup){
+      const res= await axios.post(
+        url + `/msg/send/${id}`,
         { text, image: file },
         { withCredentials: true }
       );
+      if(res.data){
+        
+
+        settext("");
+setfile(null);
+setPreviewUrl(null);
+fileInputRef.current.value = "";
+
+
+      }}
+      else{
+        const res= await axios.post(
+        url + `/grpmsg/send/${id}`,
+        { text, image: file },
+        { withCredentials: true }
+      );
+      if(res.data){
+       
+        settext("");
+setfile(null);
+setPreviewUrl(null);
+fileInputRef.current.value = "";
+
+
+      }
+        
+      }
       
-      settext("");
-      setfile(null);
+      
     } catch (err) {
       console.log(err);
     }
