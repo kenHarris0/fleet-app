@@ -89,7 +89,11 @@ if (isGroup && selectedUser?.members?.length) {
 }
 let isUseranAdmin;
 if(selectedUser && selectedUser?.admins){
- isUseranAdmin =selectedUser?.admins.includes(userdata._id)
+  isUseranAdmin = selectedUser?.admins?.some(a => {
+  const id = typeof a === "string" ? a : a._id;
+  return id === userdata._id;
+});
+
 }
 //makeadmin feature
 
@@ -139,6 +143,50 @@ const Leavegrp=async(groupId)=>{
     console.log(err)
   }
 }
+//remove user by admin 
+const removeUser=async(removeId,groupId)=>{
+  try{
+    const res=await axios.post(url+`/grp/removeUser/${removeId}`,{groupId},{withCredentials:true})
+    if(res.data){
+      setselecteduser(res.data)
+    }
+
+  }
+   catch(err){
+    console.log(err)
+  }
+}
+
+
+// related to add new memebrs to a group
+const [showaddmembers,setaddmembers]=useState(false)
+let filteredUsers = [];
+
+if (people && isGroup && selectedUser?.members) {
+  filteredUsers = people.filter(
+    (person) => !selectedUser.members.includes(person._id)
+  );
+}
+
+const addNewusertogrp=async(groupId,receiverId)=>{
+   try{
+    const res=await axios.post(url+`/grp/addtogrp/${receiverId}`,{groupId},{withCredentials:true})
+    if(res.data){
+      setselecteduser(res.data)
+      toast.success("Added user to",selectedUser.name)
+    }
+
+  }
+   catch(err){
+    console.log(err)
+  }
+
+}
+
+
+useEffect(()=>{
+  getallPeople()
+},[showaddmembers])
 
 
   useEffect(()=>{
@@ -260,6 +308,21 @@ const Leavegrp=async(groupId)=>{
         </span>
       ) : (
         isUseranAdmin && (
+          <div className='flex items-center justify-between gap-2'>
+          <button className='
+          text-[10px]
+              px-2 py-1
+              bg-red-500
+              rounded-md
+              font-semibold
+              hover:bg-red-600'
+              onClick={(e)=>{
+                e.stopPropagation();
+                removeUser(member._id,selectedUser._id)
+               } }>
+            Remove
+
+          </button>
           <button
             onClick={(e) => {
               e.stopPropagation();
@@ -276,6 +339,7 @@ const Leavegrp=async(groupId)=>{
           >
             Promote
           </button>
+          </div>
         )
       )}
 
@@ -329,7 +393,34 @@ const Leavegrp=async(groupId)=>{
 
 </div>
 
-<div className='w-full h-[80%] flex items-end justify-start'>
+<div className='w-full h-[80%] flex items-end justify-start relative gap-4'>
+
+  <button onClick={()=>setaddmembers(prev=>!prev)} className='cursor-pointer w-[100px] h-[25px] text-sm bg-green-500'>Add Members</button>
+  {showaddmembers && (
+    <div className='absolute left-0 top-10 bg-gray-400 w-full   h-[200px] z-1000 overflow-y-auto flex flex-col p-4 gap-3 '>
+      {filteredUsers?.map(user=>
+      (
+        <div className='w-[50%] h-5 flex '>
+          <div className='flex w-[30%] items-center justify-between gap-2 '>
+            <img src={user?.image || "/avatar.png"} alt='x' className='w-5 h-5 rounded-full object-cover'/>
+          <h1>{user?.name}</h1>
+
+          </div>
+
+          <div className='w-[70%]  flex items-center justify-end'>
+            <button className='w-7 h-7 bg-green-500 cursor-pointer' onClick={()=>addNewusertogrp(selectedUser._id,user._id)}>+</button>
+          </div>
+          
+
+        </div>)
+
+      
+)}
+
+
+      </div>
+  )}
+
   <button className='bg-red-600 text-white text-base w-[100px] h-[25px] cursor-pointer' onClick={()=>Leavegrp(selectedUser._id)}>
     Leave Group
   </button>

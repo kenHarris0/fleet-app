@@ -103,3 +103,50 @@ let img
   }
 }
 
+export const removeUserfromgroup=async(req,res)=>{
+  try{
+    const senderId=req.userId
+    const removeId=req.params.id
+const {groupId}=req.body
+
+const group=await Group.findById(groupId)
+if(!group){
+  return res.json({message:"no group found"})
+}
+const updatedgrp=await Group.findByIdAndUpdate(groupId,{
+  $pull:{members:removeId,admins:removeId},
+  
+
+},{new:true})
+
+res.json(updatedgrp)
+
+  }
+  catch(err){
+    console.log(err)
+  }
+}
+
+export const addUsertogroup=async(req,res)=>{
+  try{
+    const senderId=req.userId
+    const adderId=req.params.id
+const {groupId}=req.body
+
+const group=await Group.findById(groupId)
+if(!group){
+  return res.json({message:"no group found"})
+}
+const updatedgrp=await Group.findByIdAndUpdate(groupId,{
+  $addToSet:{members:adderId},
+  
+
+},{new:true})
+
+res.json(updatedgrp)
+
+  }
+  catch(err){
+    console.log(err)
+  }
+}
