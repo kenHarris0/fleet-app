@@ -18,7 +18,10 @@ const schema=new mongoose.Schema({
         ref:"user",
         default:[]
     }
-    ]
+    ],
+    image:{
+        type:String
+    }
     
    
 

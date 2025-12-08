@@ -80,7 +80,7 @@ const navigator=useNavigate()
     fetchall()
 
 
-  },[userdata])
+  },[userdata,selectedUser,])
 
   //to fetch bg 
 
@@ -217,15 +217,19 @@ const navigator=useNavigate()
                       
                       return(
                         <div className='w-full h-20 flex items-center justify-start border p-5 gap-3 cursor-pointer' key={ind} onClick={(e)=>{setselecteduser(user);
-                         if(isGrp){
-                          setIsgroup(true)
+                         if (isGrp) {
+    setIsgroup(true);
+  } else {
+    setIsgroup(false);
+  }
 
-                         } 
+  
+  
                         }}>
                           <div className='w-[80%] h-full flex items-center justify-start gap-3'>
   {isGrp ? (
     <>
-      <img src={"/avatar.png"} alt="group" className="w-12 h-12 object-cover rounded-full" />
+      <img src={user?.image || "/avatar.png"} alt="group" className="w-12 h-12 object-cover rounded-full" />
       <h3 className="text-xl">{user?.name} (Group)</h3>
     </>
   ) : (
@@ -276,11 +280,11 @@ const navigator=useNavigate()
   <div className='w-[72%] h-full flex flex-col items-center justify-center rounded-2xl'>
     {selectedUser ? (
       <>
-        <div className='w-full h-[7%] rounded-6sxl'>
-          <ChatHeader selectedUser={selectedUser} isGroup={isGroup}/>
+        <div className='w-full h-[7%] rounded-6sxl relative z-50'>
+          <ChatHeader selectedUser={selectedUser} isGroup={isGroup} setselecteduser={setselecteduser} setIsgroup={setIsgroup}/>
         </div>
 
-        <div className='w-full h-[86%] bg-gray-800  overflow-hidden'
+        <div className='w-full h-[86%] bg-gray-800  '
         style={{
       backgroundImage: chatBackground ? `url(${chatBackground})` : "none",
       backgroundSize: "cover",

@@ -85,7 +85,7 @@
     return (
       <div className='w-[80%] h-20 flex justify-between items-center px-10
                   fixed top-0 left-1/2 -translate-x-1/2
-                  z-50 bg-transparent'>
+                  z-5000 bg-transparent'>
 
 
         

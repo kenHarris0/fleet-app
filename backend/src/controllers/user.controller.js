@@ -3,6 +3,7 @@ import bcrypt from 'bcrypt'
 import {createCookie} from '../lib/cookieHandler.js'
 import cloudinary from "../lib/cloudinary.js"
 import {io,findUsersocketid} from '../lib/socket.js'
+import Group from '../models/Groups.model.js'
 export const login=async(req,res)=>{
     const {email,password}=req.body
 
@@ -161,6 +162,39 @@ export const rejectRequest=async(req,res)=>{
  res.json({ success: true });
 
 
+
+    }
+    catch (err) {
+    console.log(err);
+    res.status(500).json({ error: "Server error" });
+  }
+}
+
+export const Leavegroup=async(req,res)=>{
+    try{
+        const senderId=req.userId
+        const groupId=req.params.id
+
+        const group=await Group.findById(groupId)
+        if(!group){
+            return res.json({message:"no group found"})
+        }
+        if (group.admins.length === 1 && group.admins[0].toString() === senderId) {
+  return res.json({ message: "You are the only admin, assign another admin before leaving" });
+}
+
+      const updatedGroup = await Group.findByIdAndUpdate(
+  groupId,
+  {
+    $pull: { members: senderId, admins: senderId }
+  },
+  { new: true }
+);
+
+return res.json(updatedGroup);
+
+
+        
 
     }
     catch (err) {

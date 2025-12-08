@@ -15,7 +15,7 @@ const lastref=useRef()
         const fetchdata=async()=>{
         await getMessagebyid(selectedUser._id)
         }
-        fetchdata()
+         fetchdata()
       }
       else if(isGroup){
       const fetchall=async()=>{
@@ -34,7 +34,7 @@ lastref.current?.scrollIntoView({behavior:"smooth"})
 let overallmsg=isGroup?grpmessage:messages
 
   return (
-    <div className='w-full h-[90%] flex flex-col p-7 gap-2 overflow-y-auto bg-black-300 ml-1 text-white'>
+    <div className='w-full h-[90%] flex flex-col p-7 gap-2 overflow-y-auto bg-black-300 ml-1 text-white z-0'>
 
 
       
@@ -52,7 +52,7 @@ let overallmsg=isGroup?grpmessage:messages
     <div className="w-10 rounded-full">
       <img
         alt="Tailwind CSS chat bubble component"
-        src={userdata?.image}
+        src={userdata?.image || "/avatar.png"}
       />
     </div>
   </div>
