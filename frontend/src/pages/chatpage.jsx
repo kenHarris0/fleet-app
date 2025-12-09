@@ -212,7 +212,7 @@ const navigator=useNavigate()
                     isUsersFriend=true
                   }
                   const isPending = userdata?.requestpending?.includes(user._id);
-                  const isGrp = user?.members && user.members.length > 2;
+                  const isGrp = user?.members ;
 
                       
                       return(

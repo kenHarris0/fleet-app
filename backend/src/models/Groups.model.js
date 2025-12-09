@@ -21,7 +21,13 @@ const schema=new mongoose.Schema({
     ],
     image:{
         type:String
-    }
+    },
+    description:{type:String,default:""},
+    personality:{
+        type:String,default:""
+    },
+    category:{type:String,default:""},
+    isSpecial:{type:Boolean,default:false}
     
    
 

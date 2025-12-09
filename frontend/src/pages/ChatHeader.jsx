@@ -1,6 +1,6 @@
 import React, { memo, useContext, useEffect, useRef, useState } from 'react';
 import { fleetContext } from '../context/Context';
-import { SquarePen } from 'lucide-react';
+import { SquarePen,FilePenLine } from 'lucide-react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 
@@ -172,7 +172,13 @@ const addNewusertogrp=async(groupId,receiverId)=>{
    try{
     const res=await axios.post(url+`/grp/addtogrp/${receiverId}`,{groupId},{withCredentials:true})
     if(res.data){
-      setselecteduser(res.data)
+      setselecteduser(prev=>{
+        return({
+          ...prev,
+          members:res.data.members
+        })
+      })
+      
       toast.success("Added user to",selectedUser.name)
     }
 
@@ -187,7 +193,29 @@ const addNewusertogrp=async(groupId,receiverId)=>{
 useEffect(()=>{
   getallPeople()
 },[showaddmembers])
+// set description 
+const [description,setdescription]=useState("")
+const [showdescinput,setshowdescip]=useState(false)
 
+const handleadddescription=async(groupId)=>{
+  try{
+    const res=await axios.post(url+`/grp/updatedesc/${groupId}`,{description},{withCredentials:true})
+    if(res.data){
+      setselecteduser(prev=>{
+        return({
+          ...prev,
+          description:res.data.description
+        })
+      })
+      toast.success("Added description")
+    }
+
+  }
+   catch(err){
+    console.log(err)
+  }
+
+}
 
   useEffect(()=>{
     if(showdropdown) getallPeople()
@@ -393,8 +421,55 @@ useEffect(()=>{
 
 </div>
 
-<div className='w-full h-[80%] flex items-end justify-start relative gap-4'>
+<div className='w-full h-[80%] flex flex-col items-start justify-between relative gap-4 p-4'>
 
+  <div className="flex flex-col items-start justify-start relative w-full">
+  <div className="flex items-center justify-between w-full">
+    <h1 className="text-lg">Description:</h1>
+
+   
+    {isUseranAdmin && (
+      <FilePenLine
+        className="w-5 h-5 text-white cursor-pointer"
+        onClick={() => setshowdescip(prev => !prev)}
+      />
+    )}
+  </div>
+
+  {/* Show description text if present */}
+  {selectedUser.description && !showdescinput && (
+    <p className="mt-2 text-sm opacity-90">{selectedUser.description}</p>
+  )}
+
+  {/* Description Form */}
+  {showdescinput && (
+    <form
+      onSubmit={(e) => {
+        e.preventDefault();
+        handleadddescription(selectedUser._id);
+        setshowdescip(false);
+      }}
+      className="mt-3 w-full border p-3 rounded-md bg-black/50 flex flex-col gap-3"
+    >
+      <textarea
+        placeholder="Group description..."
+        className="w-full p-2 rounded-md bg-gray-800 text-white outline-none"
+        rows={4}
+        value={description}
+        onChange={(e) => setdescription(e.target.value)}
+      />
+      <button
+        type="submit"
+        className="self-end bg-green-500 px-3 py-1 rounded-md text-sm hover:bg-green-600"
+      >
+        Save
+      </button>
+    </form>
+  )}
+</div>
+
+
+  <div className='flex gap-2 justify-between items-center'>
   <button onClick={()=>setaddmembers(prev=>!prev)} className='cursor-pointer w-[100px] h-[25px] text-sm bg-green-500'>Add Members</button>
   {showaddmembers && (
     <div className='absolute left-0 top-10 bg-gray-400 w-full   h-[200px] z-1000 overflow-y-auto flex flex-col p-4 gap-3 '>
@@ -424,6 +499,7 @@ useEffect(()=>{
   <button className='bg-red-600 text-white text-base w-[100px] h-[25px] cursor-pointer' onClick={()=>Leavegrp(selectedUser._id)}>
     Leave Group
   </button>
+   </div>
 
 </div>
     

@@ -150,3 +150,27 @@ res.json(updatedgrp)
     console.log(err)
   }
 }
+
+export const modifyDescription=async(req,res)=>{
+  try{
+    const senderId=req.userId
+    const {description}=req.body
+    const groupId=req.params.id
+const group=await Group.findById(groupId)
+if(!group){
+  return res.json({message:"no group found"})
+}
+if(!group.admins.includes(senderId)){
+  return res.json({message:"only admin can modify group description"})
+}
+const updatedgrp=await Group.findByIdAndUpdate(groupId,
+ {description:description},{new:true})
+ res.json(updatedgrp)
+
+
+
+  }
+  catch(err){
+    console.log(err)
+  }
+}
