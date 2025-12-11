@@ -252,19 +252,54 @@
   }
 
 
-  const value={url,
-    userdata,setuserdata,loggedin,setloggedin,
-    authuser,getuserdata,logout,
-    chats,setchats,getallChats,
-    friends,setfriends,getallFriends,
-    people,setpeople,getallPeople,
-    //msg related fetching and all
-    getMessagebyid,socket,onlineUsers,messages,setmessages,
-    getMessagebyid,
-    chatBackground,setchatBackground,handleChatbg,
-    groups,setgroups,getUsergroup,
-    grpmessage,setgrpmessage,getGroupMessage
-  }
+const value = {
+  url,
+  userdata,
+  setuserdata,
+  loggedin,
+  setloggedin,
+  authuser,
+  getuserdata,
+  logout,
+
+  // chats
+  chats,
+  setchats,
+  getallChats,
+
+  // friends
+  friends,
+  setfriends,
+  getallFriends,
+
+  // people
+  people,
+  setpeople,
+  getallPeople,
+
+  // messages
+  getMessagebyid,   // <-- only once
+  socket,
+  onlineUsers,
+  messages,
+  setmessages,
+
+  // chat background
+  chatBackground,
+  setchatBackground,
+  handleChatbg,
+
+  // groups
+  groups,
+  setgroups,
+  getUsergroup,
+
+  // group messages
+  grpmessage,
+  setgrpmessage,
+  getGroupMessage,
+};
+
   useEffect(()=>{
     if(!userdata) return;
     connectSocket()

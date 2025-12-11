@@ -4,7 +4,7 @@
   import axios from 'axios';
   import {toast} from 'react-toastify'
   import ChatContainer from './ChatContainer.jsx'
-  import ChatSender from '../components/ChatSender'
+  import ChatSender from '../components/ChatSender.jsx'
   import ChatHeader from './ChatHeader.jsx'
   import { UserPlus,Timer,Users   } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
