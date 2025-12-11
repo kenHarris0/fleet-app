@@ -2,7 +2,8 @@ import React from 'react'
 import Navbar from './components/Navbar'
 import {Route,Routes} from 'react-router-dom'
 import Home from './pages/Home'
-import Chatpage from './pages/Chatpage'
+import Chatpage from "./pages/chatpage.jsx";
+
 import Login from './pages/Login'
 import {ToastContainer} from 'react-toastify'
 import Creategroup from './pages/Creategroup'
