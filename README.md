@@ -193,7 +193,7 @@ A real-time communication platform built using MERN, Socket.IO, Tailwind CSS, GS
 
 ---
 
-* `git clone https://github.com/yourusername/fleet-app.git`
+* `https://github.com/kenHarris0/fleet-app.git`
 * `cd fleet-app`
 
 ---
