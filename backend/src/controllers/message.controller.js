@@ -64,7 +64,7 @@ export const sendMessage=async(req,res)=>{
                 {senderId:senderId,receiverId:receiverId},
                  {senderId:receiverId,receiverId:senderId}
             ]
-        }).sort({createdAt:1})
+        }).sort({createdAt:1}).populate("receiverId","image").populate(("senderId","image"))
 
         res.json(messages)
 
