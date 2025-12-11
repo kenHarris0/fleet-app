@@ -1,14 +1,16 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { useEffect } from 'react';
 import { gsap } from "gsap";
 import SplitType from "split-type";
 
 import Chatpage from './Chatpage';
 import { useNavigate } from 'react-router-dom';
+import { fleetContext } from '../context/Context';
 
 
 const Home = () => {
   const navv=useNavigate()
+  const {userdata}=useContext(fleetContext)
     
 useEffect(() => {
   gsap.fromTo(
@@ -66,11 +68,11 @@ useEffect(() => {
 
 
   return (
-    <div className='w-[80%] m-auto h-screen pt-28'>
+    <div className='w-[80%] m-auto min-h-screen pt-28'>
       
       <div>
         <h1 className=' floating-title text-[150px] font-bold leading-tight mt-5 '>
-          Welcome User, to <span className='rotate-text transform-3d perspective-600'>Fleets</span>
+          Welcome <span className='color-train'>{userdata?.name || "User"}</span>, to <span className='rotate-text transform-3d perspective-600'>Fleets</span>
         </h1>
 
         <h4 className='text-[36px] font-medium mt-8 color-train'>
@@ -78,7 +80,7 @@ useEffect(() => {
         </h4>
 
         <div className='flex gap-4 mt-[130px]'>
-          <button className='px-6 py-3 border rounded-full hover:bg-white hover:text-black transition'>
+          <button className='px-6 py-3 border rounded-full hover:bg-white hover:text-black transition' onClick={()=>navv('/selectgrp')}>
             Find Your Fleet
           </button>
           <button className='px-6 py-3 border rounded-full hover:bg-white hover:text-black transition' onClick={()=>navv('/chat')}>

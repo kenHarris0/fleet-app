@@ -164,7 +164,7 @@ const navigator=useNavigate()
           <div className='w-[90%] h-[87vh] bg-gray-900 mt-10  flex'>
 
                               {/*left part*/}
-            <div className='w-[28%] h-full flex flex-col items-center justify-center border-r  '>
+            <div className='w-[28%] h-full flex flex-col items-center justify-center border-r overflow-y-auto '>
 
               <div className='w-full h-[10%] flex   items-center justify-start gap-4 p-2'>
                 <div className='w-[30%] flex items-center justify-center gap-2'>

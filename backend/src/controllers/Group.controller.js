@@ -1,6 +1,8 @@
 import Group from "../models/Groups.model.js";
 import { io, findUsersocketid } from "../lib/socket.js";
 import cloudinary from '../lib/cloudinary.js'
+
+
 export const createGroup = async (req, res) => {
   try {
     const senderId = req.userId;
@@ -137,6 +139,8 @@ const group=await Group.findById(groupId)
 if(!group){
   return res.json({message:"no group found"})
 }
+
+
 const updatedgrp=await Group.findByIdAndUpdate(groupId,{
   $addToSet:{members:adderId},
   
@@ -167,6 +171,34 @@ const updatedgrp=await Group.findByIdAndUpdate(groupId,
  {description:description},{new:true})
  res.json(updatedgrp)
 
+
+
+  }
+  catch(err){
+    console.log(err)
+  }
+}
+
+export const assignUserTospecialGroup=async(req,res)=>{
+  try{
+    const senderId=req.userId
+    const {groupName}=req.body
+
+    const group=await Group.findOne({name:groupName})
+    if(!group){
+      return res.json({message:"no group found server issue"})
+    }
+    if (group.members.includes(senderId)) {
+  return res.json({ message: "Already in the group", groupName });
+}
+
+
+    const sgroup=await Group.findOneAndUpdate({name:groupName},{
+      $addToSet:{members:senderId}
+    },{new:true})
+
+
+    res.json(sgroup)
 
 
   }

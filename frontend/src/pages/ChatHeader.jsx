@@ -3,7 +3,7 @@ import { fleetContext } from '../context/Context';
 import { SquarePen,FilePenLine } from 'lucide-react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
-
+import {useNavigate} from 'react-router-dom'
 const ChatHeader = ({ selectedUser,isGroup,setselecteduser,setIsgroup }) => {
   const {url,userdata,getUsergroup, chatBackground, setchatBackground,handleChatbg,onlineUsers,people,getallPeople,getuserdata,grpmessage,setgrpmessage,getGroupMessage} = useContext(fleetContext);
   const fileInputRef = useRef(null);
@@ -196,6 +196,8 @@ useEffect(()=>{
 // set description 
 const [description,setdescription]=useState("")
 const [showdescinput,setshowdescip]=useState(false)
+const navv=useNavigate()
+
 
 const handleadddescription=async(groupId)=>{
   try{
@@ -208,6 +210,7 @@ const handleadddescription=async(groupId)=>{
         })
       })
       toast.success("Added description")
+      setdescription("")
     }
 
   }
@@ -233,7 +236,11 @@ const handleadddescription=async(groupId)=>{
       <div className="w-full h-full flex items-center justify-between p-5">
 
         {/* Left: selected user */}
-       {!isGroup && (<div className="flex items-center gap-2">
+       {!isGroup && (
+        <div className="flex items-center gap-2 cursor-pointer"   onClick={(e) => {
+      e.stopPropagation();
+      navv(`/othersprofile/${selectedUser._id}`);
+    }}>
           <div className={`avatar ${isOnline?"avatar-online":""}`}>
             <img
             src={selectedUser?.image || "/avatar.png"}
@@ -471,30 +478,40 @@ const handleadddescription=async(groupId)=>{
 
   <div className='flex gap-2 justify-between items-center'>
   <button onClick={()=>setaddmembers(prev=>!prev)} className='cursor-pointer w-[100px] h-[25px] text-sm bg-green-500'>Add Members</button>
-  {showaddmembers && (
-    <div className='absolute left-0 top-10 bg-gray-400 w-full   h-[200px] z-1000 overflow-y-auto flex flex-col p-4 gap-3 '>
-      {filteredUsers?.map(user=>
-      (
-        <div className='w-[50%] h-5 flex '>
-          <div className='flex w-[30%] items-center justify-between gap-2 '>
-            <img src={user?.image || "/avatar.png"} alt='x' className='w-5 h-5 rounded-full object-cover'/>
-          <h1>{user?.name}</h1>
-
-          </div>
-
-          <div className='w-[70%]  flex items-center justify-end'>
-            <button className='w-7 h-7 bg-green-500 cursor-pointer' onClick={()=>addNewusertogrp(selectedUser._id,user._id)}>+</button>
-          </div>
+{showaddmembers && (
+  <div className='absolute left-0 top-10 bg-gray-400 w-full max-h-[200px] z-1000 overflow-y-auto flex flex-col p-4 gap-3'>
+    {isUseranAdmin ? (
+      filteredUsers?.map((user) => (
+        <div key={user._id} className='w-full flex items-center justify-between p-2 bg-gray-300 rounded-lg'>
           
+          {/* Left Part */}
+          <div className='flex items-center gap-2'>
+            <img
+              src={user?.image || "/avatar.png"}
+              alt='avatar'
+              className='w-7 h-7 rounded-full object-cover'
+            />
+            <h1 className='text-sm font-medium'>{user?.name}</h1>
+          </div>
 
-        </div>)
-
-      
+          {/* Add Button */}
+          <button 
+            onClick={() => addNewusertogrp(selectedUser._id, user._id)}
+            className='w-7 h-7 bg-green-500 hover:bg-green-600 text-white rounded-md flex items-center justify-center'
+          >
+            +
+          </button>
+        </div>
+      ))
+    ) : (
+      <p className='text-red-600 text-sm'>Only admins can add members</p>
+    )}
+  </div>
 )}
 
 
-      </div>
-  )}
+
+     
 
   <button className='bg-red-600 text-white text-base w-[100px] h-[25px] cursor-pointer' onClick={()=>Leavegrp(selectedUser._id)}>
     Leave Group

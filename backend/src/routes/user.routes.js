@@ -2,7 +2,7 @@ import express from 'express'
 
  const router=express.Router()
 import authMiddleware from "../middlewares/auth.middleware.js"
-import {login,logout,signup,getuserdata,updateProfilepic,acceptFriendRequest,rejectRequest,Leavegroup} from "../controllers/user.controller.js"
+import {login,logout,signup,getuserdata,updateProfilepic,acceptFriendRequest,rejectRequest,Leavegroup,updateProfile,updatePersonality,getuserbyid} from "../controllers/user.controller.js"
 
 
 router.post('/login',login)
@@ -12,6 +12,12 @@ router.get('/getuserdata',authMiddleware,getuserdata)
 router.post('/acceptfriend/:id',authMiddleware,acceptFriendRequest)
 router.post('/rejectfriend/:id',authMiddleware,rejectRequest)
 router.post('/leavegrp/:id',authMiddleware,Leavegroup)
+router.post('/updateProfile',authMiddleware,updateProfile)
+router.post('/updatePersonality',authMiddleware,updatePersonality)
+router.get("/getuserbyid/:id", authMiddleware, getuserbyid);
+
+
+
 router.post('/check',authMiddleware,(req,res)=>{
     try{
         res.json({success:true,message:"user Authenticated"})

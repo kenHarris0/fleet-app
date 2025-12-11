@@ -23,9 +23,12 @@ export const sendMessageingroup=async(req,res)=>{
             text,image:img
         })
         await newmsg.save()
+        const populatedMsg = await newmsg.populate("senderId", "name image");
+
+io.to(String(groupId)).emit("receiveMessage", populatedMsg)
 
         
-            io.to(String(groupId)).emit("receiveMessage",newmsg)
+           
         
 
 

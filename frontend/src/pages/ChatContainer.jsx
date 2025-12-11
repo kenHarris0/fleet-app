@@ -30,6 +30,8 @@ const lastref=useRef()
 useEffect(()=>{
 lastref.current?.scrollIntoView({behavior:"smooth"})
 },[messages,grpmessage])
+
+
   
 let overallmsg=isGroup?grpmessage:messages
 
@@ -39,8 +41,10 @@ let overallmsg=isGroup?grpmessage:messages
 
       
         {overallmsg?.map((message,ind)=>{
-           const isSender = message?.senderId === userdata?._id ||
-           message.senderId?._id===userdata._id
+           const isSender =
+  message?.senderId?._id?.toString() === userdata?._id?.toString() ||
+  message?.senderId?.toString() === userdata?._id?.toString();
+
 
 
             return(
@@ -52,7 +56,7 @@ let overallmsg=isGroup?grpmessage:messages
     <div className="w-10 rounded-full">
       <img
         alt="Tailwind CSS chat bubble component"
-        src={userdata?.image || "/avatar.png"}
+        src={userdata?.image  || "/avatar.png"}
       />
     </div>
   </div>
@@ -82,7 +86,7 @@ let overallmsg=isGroup?grpmessage:messages
     <div className="w-10 rounded-full">
       <img
         alt="Tailwind CSS chat bubble component"
-        src={(isGroup ? message.senderId?.image : selectedUser?.image) || "/avatar.png"}
+        src={message?.senderId?.image || "/avatar.png"}
       />
     </div>
   </div>

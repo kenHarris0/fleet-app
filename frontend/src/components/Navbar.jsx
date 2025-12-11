@@ -94,8 +94,8 @@
         <div className='flex gap-10 text-[14px]'>
           <p className='nav-item hover:text-gray-400 transition' onClick={()=>navv('/')}>Home</p>
           <p className='nav-item hover:text-gray-400 transition'>Features</p>
-          <p className='nav-item hover:text-gray-400 transition'>Chats</p>
-          <p className='nav-item hover:text-gray-400 transition'>Find Fleets</p>
+          <p className='nav-item hover:text-gray-400 transition' onClick={()=>navv('/chat')}>Chats</p>
+          <p className='nav-item hover:text-gray-400 transition' onClick={()=>navv('/selectgrp')}>Find Fleets</p>
         </div>
 
         <div className='flex items-center justify-between gap-10 '>
@@ -104,7 +104,7 @@
       className='w-6 h-6 cursor-pointer'
       onClick={() => setshowdropdown((prev) => !prev)}
     />
-    <p className='text-black text-[10px] bg-white rounded full w-3 h-3  absolute -top-2 -right-2 flex items-center justify-center'>{noticount}</p>
+    <p className='text-black text-[9px] bg-white rounded-full w-3 h-3  absolute -top-2 -right-2 flex items-center justify-center'>{noticount}</p>
 
     {showdropdown && (
       <div className='absolute right-0 top-8 w-[450px] bg-gray-800 text-white 
@@ -145,7 +145,7 @@
           {!userdata ? (<p className='btn-elm w-[140px] h-[35px] flex items-center justify-center' onClick={()=>navv('/userauth')}>
             Login / Register
           </p>):(
-            <img src={userdata?.image || "/avatar.png"} alt="profile" className='w-10 h-10 object-cover rounded-full cursor-pointer' />
+            <img src={userdata?.image || "/avatar.png"} alt="profile" className='w-10 h-10 object-cover rounded-full cursor-pointer' onClick={()=>navv(`/profile/${userdata._id}`)}/>
           )}
         </div>
 

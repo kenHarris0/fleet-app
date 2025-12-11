@@ -202,3 +202,80 @@ return res.json(updatedGroup);
     res.status(500).json({ error: "Server error" });
   }
 }
+
+export const updateProfile=async(req,res)=>{
+  try{
+    const senderId=req.userId
+    const {aboutme,hobbies,tag,vibe}=req.body
+    let newhobbies
+    if(hobbies){
+       newhobbies=hobbies.split(',')
+    }
+    let newabout;
+    if(aboutme){
+      newabout=aboutme
+    }
+     let newtag;
+    if(tag){
+      newtag=tag
+    }
+     let newvibe;
+    if(vibe){
+      newvibe=vibe
+    }
+   
+  
+
+    const updatedUser=await User.findByIdAndUpdate(senderId,
+      {
+        aboutme:newabout,
+        hobbies:newhobbies,
+        tag:newtag,
+        vibe:newvibe
+      }
+    )
+
+    res.json(updatedUser)
+
+  }
+    catch (err) {
+    console.log(err);
+    res.status(500).json({ error: "Server error" });
+  }
+}
+
+export const updatePersonality=async(req,res)=>{
+   try{
+    const senderId=req.userId
+    const {personality}=req.body
+  
+     const updatedUser=await User.findByIdAndUpdate(senderId,
+      {
+        personality:personality
+      },
+      {new:true}
+    )
+
+    res.json(updatedUser)
+
+  }
+    catch (err) {
+    console.log(err);
+    res.status(500).json({ error: "Server error" });
+  }
+}
+
+export const getuserbyid = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const user = await User.findById(id).select("-password");
+
+    if (!user) return res.status(404).json({ error: "User not found" });
+
+    res.json(user);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ error: "Server error" });
+  }
+};
