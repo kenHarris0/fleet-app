@@ -5,7 +5,8 @@
   import {io} from 'socket.io-client'
 
   const Context = ({children}) => {
-  const url="http://localhost:5000"
+  const url = import.meta.env.PROD ? "" : "http://localhost:5000";
+
     const [userdata,setuserdata]=useState(null)
   const [loggedin,setloggedin]=useState(false)
 
