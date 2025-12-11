@@ -4,7 +4,7 @@
   "description": "A real-time communication platform built using MERN, Socket.IO, Tailwind CSS, GSAP, and Cloudinary.",
   "main": "index.js",
    "engines": {
-  "node": "18.x"
+  "node": "20.x"
 },
   "scripts": {
     "build": "npm install --prefix backend && npm install --prefix frontend && npm run build --prefix frontend",
