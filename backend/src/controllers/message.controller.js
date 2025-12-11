@@ -24,23 +24,27 @@ export const sendMessage=async(req,res)=>{
             image:Image
         })
         await newmsg.save()
+        const fullMsg = await Message.findById(newmsg._id)
+  .populate("senderId", "image name")
+  .populate("receiverId", "image name");
+
          const senderSocket=findUsersocketid(senderId)
         if (senderSocket) {
-  io.to(senderSocket).emit("Getmessages", newmsg); // sender sees message instantly
+  io.to(senderSocket).emit("Getmessages", fullMsg); // sender sees message instantly
 }
 
         const receiverSocket=findUsersocketid(receiverId)
         if(receiverSocket){
             
                 
-            io.to(receiverSocket).emit("Getmessages",newmsg)
+            io.to(receiverSocket).emit("Getmessages",fullMsg)
 
 
 
 
         }
 
-        res.json(newmsg)
+        res.json(fullMsg)
 
      
 
@@ -64,7 +68,7 @@ export const sendMessage=async(req,res)=>{
                 {senderId:senderId,receiverId:receiverId},
                  {senderId:receiverId,receiverId:senderId}
             ]
-        }).sort({createdAt:1}).populate("receiverId","image").populate(("senderId","image"))
+        }).sort({createdAt:1}).populate("receiverId","image name").populate("senderId","image name")
 
         res.json(messages)
 
