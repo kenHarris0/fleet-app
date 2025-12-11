@@ -3,7 +3,8 @@ import { useEffect } from 'react';
 import { gsap } from "gsap";
 import SplitType from "split-type";
 
-import Chatpage from "./pages/chatpage.jsx";
+import Chatpage from "./chatpage.jsx";
+
 
 import { useNavigate } from 'react-router-dom';
 import { fleetContext } from '../context/Context';
