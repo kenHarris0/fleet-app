@@ -136,7 +136,7 @@ const url = import.meta.env.PROD
         socket.disconnect();
         setsocket(null)
       }
-      const skt= io("http://localhost:5000",{
+      const skt= io(url,{
         withCredentials:true
       })
       setsocket(skt)
